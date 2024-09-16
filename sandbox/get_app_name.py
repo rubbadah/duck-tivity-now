@@ -13,5 +13,6 @@ if response.status_code == 200:
     app_data = response.json()
     app_name = app_data.get("name")
     print(f"アプリケーション名: {app_name}")
+    print(app_data)
 else:
     print(f"エラーが発生しました: {response.status_code}")
