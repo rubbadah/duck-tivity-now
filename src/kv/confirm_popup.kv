@@ -1,0 +1,13 @@
+<ConfirmPopup>:
+    title: "確認"
+    size_hint: 0.8, 0.5
+    auto_dismiss: False
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: root.message
+        Button:
+            text: "閉じる"
+            size_hint_y: None
+            height: dp(40)
+            on_press: root.dismiss()

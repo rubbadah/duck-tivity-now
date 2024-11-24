@@ -1,0 +1,38 @@
+#:import ConfirmPopup widgets.confirm_popup.ConfirmPopup
+
+<MainScreen>:
+    # main_category: main_spinner.text
+    # sub_category: sub_spinner.text
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Spinner:
+            id: main_spinner
+            text: root.selected_main_category_name
+            values: root.main_category_names
+            on_text:
+                root.selected_client_id = root.main_categories[self.text]
+                root.selected_main_category_name = self.text
+                root.selected_sub_category = ""
+                root.update_sub_categories(self.text)
+
+        Spinner:
+            id: sub_spinner
+            text: root.selected_sub_category
+            values: root.sub_category_contents
+            on_text:
+                root.selected_sub_category = self.text
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(40)
+            Button:
+                text: "サブカテゴリの管理"
+                on_press: root.go_to_subcategory_manager()
+            Button:
+                text: "開始" if not root.is_running else "終了"
+                on_press: root.on_confirm()
+            Button:
+                text: "Discordアプリ管理"
+                on_press: root.go_to_discord_manager()

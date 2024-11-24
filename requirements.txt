@@ -1,2 +1,6 @@
 pypresence
 requests
+
+kivy
+sqlalchemy
+alembic

@@ -1,0 +1,65 @@
+<SubcategoryManagerScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(10)
+
+        RecycleView:
+            id: rv
+            viewclass: 'SubcategoryItem'
+            # dataプロパティはPythonコードから更新される
+            RecycleBoxLayout:
+                default_size: None, dp(60)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+        TextInput:
+            id: subcategory_input
+            hint_text: "新しいサブカテゴリーを入力"
+            text: root.new_subcategory
+            on_text: root.new_subcategory = self.text
+            size_hint_y: None
+            height: dp(50)
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(10)
+
+            Button:
+                text: "追加"
+                on_press: root.add_subcategory()
+            Button:
+                text: "戻る"
+                on_press: root.go_back()
+
+<SubcategoryItem@BoxLayout>:
+    orientation: "horizontal"
+    size_hint_y: None
+    height: dp(60)
+    spacing: dp(10)
+
+    TextInput:
+        id: text_input
+        text: root.editing_subcategory if root.is_editing else root.text
+        multiline: False
+        size_hint_x: 0.6
+        disabled: not root.is_editing
+        on_text: if root.is_editing: root.editing_subcategory = self.text
+        on_text_validate: root.confirm_edit(self.text)
+        background_color: app.rgb(240, 240, 240) if not root.is_selected else app.rgb(113, 193, 209)
+
+    Button:
+        id: edit_button
+        text: "編集" if not root.is_editing else "確定"
+        size_hint_x: 0.2
+        on_press: root.toggle_edit()
+
+    Button:
+        id: delete_button
+        text: "削除"
+        size_hint_x: 0.2
+        on_press: root.delete_subcategory()
+
