@@ -42,7 +42,7 @@
                 id: rv
                 viewclass: 'SubcategoryItem'
                 RecycleBoxLayout:
-                    default_size: None, dp(50)
+                    default_size: None, dp(55)
                     default_size_hint: 1, None
                     size_hint_y: None
                     height: self.minimum_height
@@ -62,14 +62,14 @@
                     text: root.new_subcategory
                     on_text: root.new_subcategory = self.text
                     size_hint_y: None
-                    height: dp(40)
+                    height: dp(45)
                     background_color: rgb(240, 240, 240)
                     foreground_color: rgb(33, 33, 33)
                     padding: [dp(10), dp(10)]
 
                 BoxLayout:
                     size_hint_y: None
-                    height: dp(40)
+                    height: dp(45)
                     spacing: dp(8)
 
                     Button:
