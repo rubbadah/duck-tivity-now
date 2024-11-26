@@ -1,3 +1,6 @@
+import os
+import sys
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import (
@@ -14,8 +17,21 @@ from dao import DiscordApplicationDao
 from database import session_scope
 from services import DiscordApi
 
-# KVファイルを手動でロード
-Builder.load_file("kv/discord_application_manager_screen.kv")
+if getattr(sys, "frozen", False):
+    # exe実行時のパス
+    application_path = sys._MEIPASS
+else:
+    # 通常実行時のパス
+    application_path = os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__))
+    )
+
+# kvファイルのロード
+Builder.load_file(
+    os.path.join(
+        application_path, "kv", "discord_application_manager_screen.kv"
+    )
+)
 
 
 class DiscordApplicationManagerScreen(Screen):

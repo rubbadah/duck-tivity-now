@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 from kivy.app import App
 from kivy.utils import platform
@@ -7,8 +8,12 @@ from kivy.utils import platform
 
 class Config:
     def __init__(self):
-        config_dir = os.path.join(os.path.dirname(__file__), "config")
-        config_path = os.path.join(config_dir, "config.json")
+        if getattr(sys, "frozen", False):
+            application_path = sys._MEIPASS
+        else:
+            application_path = os.path.dirname(os.path.abspath(__file__))
+
+        config_path = os.path.join(application_path, "config", "config.json")
 
         with open(config_path, "r") as file:
             self.config_data = json.load(file)

@@ -1,5 +1,6 @@
 import asyncio
 import os
+import sys
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -25,15 +26,22 @@ if platform == "android":
 
     request_permissions([Permission.INTERNET])
 
+if getattr(sys, "frozen", False):
+    # exe実行時のパス
+    application_path = sys._MEIPASS
+else:
+    # 通常実行時のパス
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
 # kvファイルのロード
-Builder.load_file("kv/main_screen.kv")
-Builder.load_file("kv/subcategory_manager_screen.kv")
-Builder.load_file("kv/confirm_popup.kv")
+Builder.load_file(os.path.join(application_path, "kv", "main_screen.kv"))
+Builder.load_file(
+    os.path.join(application_path, "kv", "subcategory_manager_screen.kv")
+)
+Builder.load_file(os.path.join(application_path, "kv", "confirm_popup.kv"))
 
 # フォントファイルを指定
-font_path = os.path.join(
-    os.path.dirname(__file__), "font", "NotoSansJP-Regular.ttf"
-)
+font_path = os.path.join(application_path, "font", "NotoSansJP-Regular.ttf")
 resource_add_path(os.path.dirname(font_path))
 LabelBase.register(DEFAULT_FONT, font_path)
 
