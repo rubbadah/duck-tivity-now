@@ -1,45 +1,104 @@
+#:import rgb utils.color_utils.rgb
+
 <SubcategoryManagerScreen>:
     BoxLayout:
         orientation: "vertical"
-        padding: dp(10)
-        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: rgb(240, 240, 240)
+            Rectangle:
+                pos: self.pos
+                size: self.size
 
-        RecycleView:
-            id: rv
-            viewclass: 'SubcategoryItem'
-            # dataプロパティはPythonコードから更新される
-            RecycleBoxLayout:
-                default_size: None, dp(60)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
-
-        TextInput:
-            id: subcategory_input
-            hint_text: "新しいサブカテゴリーを入力"
-            text: root.new_subcategory
-            on_text: root.new_subcategory = self.text
-            size_hint_y: None
-            height: dp(50)
-
+        # ヘッダー
         BoxLayout:
             size_hint_y: None
-            height: dp(50)
+            height: dp(60)
+            padding: dp(15)
             spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: rgb(33, 33, 33)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
-            Button:
-                text: "追加"
-                on_press: root.add_subcategory()
-            Button:
-                text: "戻る"
-                on_press: root.go_back()
+            Label:
+                text: "サブカテゴリ管理"
+                color: rgb(255, 255, 255)
+                font_size: dp(20)
+                size_hint_x: 1
+                halign: 'left'
+                text_size: self.size
+                valign: 'center'
+
+        # メインコンテンツ
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(15)
+
+            RecycleView:
+                id: rv
+                viewclass: 'SubcategoryItem'
+                RecycleBoxLayout:
+                    default_size: None, dp(60)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(10)
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: dp(120)
+                spacing: dp(10)
+                padding: dp(15)
+                spacing: dp(10)
+
+                TextInput:
+                    id: subcategory_input
+                    hint_text: "新しいサブカテゴリーを入力"
+                    text: root.new_subcategory
+                    on_text: root.new_subcategory = self.text
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: rgb(240, 240, 240)
+                    foreground_color: rgb(33, 33, 33)
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    spacing: dp(10)
+
+                    Button:
+                        text: "追加"
+                        background_normal: ''
+                        background_color: rgb(66, 66, 66)
+                        color: rgb(255, 255, 255)
+                        on_press: root.add_subcategory()
+
+                    Button:
+                        text: "戻る"
+                        background_normal: ''
+                        background_color: rgb(66, 66, 66)
+                        color: rgb(255, 255, 255)
+                        on_press: root.go_back()
 
 <SubcategoryItem@BoxLayout>:
     orientation: "horizontal"
     size_hint_y: None
     height: dp(60)
     spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: rgb(255, 255, 255)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(5)]
+    padding: dp(10)
 
     TextInput:
         id: text_input
@@ -49,12 +108,14 @@
         disabled: not root.is_editing
         on_text: if root.is_editing: root.editing_subcategory = self.text
         on_text_validate: root.confirm_edit(self.text)
-        background_color: app.rgb(240, 240, 240) if not root.is_selected else app.rgb(113, 193, 209)
+        background_color: rgb(240, 240, 240) if not root.is_selected else rgb(113, 193, 209)
 
     Button:
         id: edit_button
         text: "編集" if not root.is_editing else "確定"
         size_hint_x: 0.2
+        background_color: rgb(255, 193, 7)
+        color: rgb(255, 255, 255)
         on_press: root.toggle_edit()
 
     Button:
@@ -62,4 +123,7 @@
         text: "削除"
         size_hint_x: 0.2
         on_press: root.delete_subcategory()
+        background_normal: ''
+        background_color: rgb(244, 122, 122)
+        color: rgb(255, 255, 255)
 

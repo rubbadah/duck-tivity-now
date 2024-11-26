@@ -1,61 +1,126 @@
+#:import rgb utils.color_utils.rgb
+
 <DiscordApplicationManagerScreen>:
     BoxLayout:
         orientation: "vertical"
-        padding: dp(10)
-        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: rgb(240, 240, 240)
+            Rectangle:
+                pos: self.pos
+                size: self.size
 
-        RecycleView:
-            id: rv
-            viewclass: 'DiscordApplicationItem'
-            RecycleBoxLayout:
-                default_size: None, dp(60)
-                default_size_hint: 1, None
-                size_hint_y: None
-                height: self.minimum_height
-                orientation: 'vertical'
-
+        # ヘッダー
         BoxLayout:
             size_hint_y: None
-            height: dp(50)
+            height: dp(60)
+            padding: dp(15)
             spacing: dp(10)
-
-            TextInput:
-                id: client_id_input
-                hint_text: "クライアントIDを入力"
-                text: root.new_client_id
-                on_text: root.new_client_id = self.text
-                on_focus: if not self.focus: root.fetch_application_name()
+            canvas.before:
+                Color:
+                    rgba: rgb(33, 33, 33)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
             Label:
-                id: application_name_label
-                text: root.new_application_name
-                size_hint_x: 0.6
+                text: "Discordアプリ管理"
+                color: rgb(255, 255, 255)
+                font_size: dp(20)
+                size_hint_x: 1
+                halign: 'left'
+                text_size: self.size
+                valign: 'center'
 
-            Button:
-                text: "追加"
-                on_press: root.add_application()
+        # メインコンテンツ
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(15)
 
-        Button:
-            text: "戻る"
-            size_hint_y: None
-            height: dp(50)
-            on_press: root.go_back()
+            RecycleView:
+                id: rv
+                viewclass: 'DiscordApplicationItem'
+                RecycleBoxLayout:
+                    default_size: None, dp(60)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(10)
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: dp(120)
+                spacing: dp(10)
+                padding: dp(15)
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(10)
+
+                    TextInput:
+                        id: client_id_input
+                        hint_text: "クライアントIDを入力"
+                        text: root.new_client_id
+                        on_text: root.new_client_id = self.text
+                        on_focus: if not self.focus: root.fetch_application_name()
+                        padding: [dp(10), dp(10)]
+
+                    Label:
+                        id: application_name_label
+                        text: root.new_application_name
+                        size_hint_x: 0.6
+                        color: rgb(33, 33, 33)
+
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    spacing: dp(10)
+
+                    Button:
+                        text: "追加"
+                        background_normal: ''
+                        background_color: rgb(66, 66, 66)
+                        color: rgb(255, 255, 255)
+                        on_press: root.add_application()
+
+                    Button:
+                        text: "戻る"
+                        background_normal: ''
+                        background_color: rgb(66, 66, 66)
+                        color: rgb(255, 255, 255)
+                        on_press: root.go_back()
 
 <DiscordApplicationItem>:
     orientation: "horizontal"
     size_hint_y: None
     height: dp(60)
     spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: rgb(255, 255, 255)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(5)]
+    padding: dp(10)
 
     Label:
         text: root.client_id
         size_hint_x: 0.4
+        color: rgb(33, 33, 33)
 
     Label:
         text: root.name
         size_hint_x: 0.4
+        color: rgb(33, 33, 33)
 
     Button:
         text: "削除"
         size_hint_x: 0.2
+        background_normal: ''
+        background_color: rgb(244, 122, 122)
+        color: rgb(255, 255, 255)
         on_press: root.delete_application()
