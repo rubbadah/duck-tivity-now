@@ -10,10 +10,20 @@ class DiscordApplicationDao(BaseDao):
         self.model = DiscordApplication
 
     def add_application(self, client_id: str, name) -> DiscordApplication:
-        new_app = DiscordApplication(client_id=client_id, name=name)
-        self.session.add(new_app)
+        app = (
+            self.session.query(DiscordApplication)
+            .filter_by(client_id=client_id)
+            .first()
+        )
+        if app:
+            # 存在していた場合は削除フラグを折る
+            app.is_deleted = False
+            app.name = name
+        else:
+            app = DiscordApplication(client_id=client_id, name=name)
+            self.session.add(app)
         self.session.commit()
-        return new_app
+        return app
 
     def get_application_by_id(self, app_id: int) -> DiscordApplication:
         return (

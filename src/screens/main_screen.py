@@ -45,6 +45,17 @@ class MainScreen(Screen):
         """画面遷移前にアプリケーション一覧を再読み込み"""
         self.load_applications()
 
+        if self.selected_main_category_name not in self.main_categories.keys():
+            # アプリ管理画面で選択されていたものが削除された場合
+            self.hide_presence()
+            self.sub_categories = {}
+            self.sub_category_contents = []
+            self.selected_client_id = ""
+            self.selected_main_category_name = ""
+            self.selected_sub_category = ""
+            self.is_running = False
+            self.presence = None
+            self.current_log_id = None
         if self.selected_main_category_name:
             # 選択されているメインカテゴリ名があれば、サブカテゴリを更新
             self.update_sub_categories(self.selected_main_category_name)

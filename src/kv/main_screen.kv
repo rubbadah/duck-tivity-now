@@ -63,10 +63,10 @@
                     background_color: rgb(255, 255, 255)
                     color: rgb(33, 33, 33)
                     on_text:
-                        root.selected_client_id = root.main_categories[self.text]
+                        root.selected_client_id = root.main_categories[self.text] if self.text else ""
                         root.selected_main_category_name = self.text
                         root.selected_sub_category = ""
-                        root.update_sub_categories(self.text)
+                        root.update_sub_categories(self.text) if self.text else ""
 
                 Label:
                     text: "ステータス"
