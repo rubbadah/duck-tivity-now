@@ -46,3 +46,19 @@ class DiscordApplicationDao(BaseDao):
             .first()
         )
         data.is_deleted = True
+
+    def update_application_name(self, client_id: str, name: str):
+        """アプリケーション名を更新
+
+        Args:
+            client_id (str): クライアントID
+            name (str): 新しいアプリケーション名
+        """
+        app = (
+            self.session.query(DiscordApplication)
+            .filter_by(client_id=client_id)
+            .first()
+        )
+        if app:
+            app.name = name
+            self.session.commit()

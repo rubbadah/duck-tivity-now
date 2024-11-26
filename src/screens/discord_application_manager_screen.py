@@ -41,8 +41,27 @@ class DiscordApplicationManagerScreen(Screen):
         with session_scope() as session:
             dao = DiscordApplicationDao(session)
             apps = dao.get_all_applications()
+            # DBに保存されている名前で初期表示
             self.applications = {app.client_id: app.name for app in apps}
         self.update_rv_data()
+
+    def on_enter(self):
+        """画面遷移完了後にAPIから名前を取得"""
+        self.update_application_names(self.applications.keys())
+
+    def update_application_names(self, client_ids):
+        """Discord APIから最新のアプリケーション名を取得して更新"""
+        discord_api = DiscordApi()
+        with session_scope() as session:
+            dao = DiscordApplicationDao(session)
+
+            for client_id in client_ids:
+                name = discord_api.get_app_name(client_id.strip())
+                if name:
+                    # APIから名前が取得できた場合のみ更新
+                    self.applications[client_id] = name
+                    # DBの名前も更新
+                    dao.update_application_name(client_id, name)
 
     def fetch_application_name(self):
         """新しいクライアントIDに基づいてアプリケーション名を取得"""
