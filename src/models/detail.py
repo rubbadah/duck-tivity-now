@@ -7,7 +7,7 @@ from .mixins import FixedColumns
 
 
 class Detail(Base, FixedColumns):
-    """詳細を管理するモデル"""
+    """詳細"""
 
     __tablename__ = "details"
 

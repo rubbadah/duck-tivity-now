@@ -6,7 +6,7 @@ from .mixins import FixedColumns
 
 
 class DiscordApplication(Base, FixedColumns):
-    """Discordアプリケーションを管理するモデル"""
+    """Discordアプリケーション"""
 
     __tablename__ = "discord_applications"
 

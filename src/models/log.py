@@ -7,7 +7,7 @@ from .mixins import FixedColumns, UTCToJSTType
 
 
 class Log(Base, FixedColumns):
-    """プリセンスの更新を蓄積するモデル"""
+    """プレゼンスの更新ログ"""
 
     __tablename__ = "logs"
 

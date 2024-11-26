@@ -14,16 +14,19 @@ from dao import DiscordApplicationDao
 from database import session_scope
 from services import DiscordApi
 
-# 手動でKVファイルをロード
+# KVファイルを手動でロード
 Builder.load_file("kv/discord_application_manager_screen.kv")
 
 
 class DiscordApplicationManagerScreen(Screen):
+    """Discordアプリケーション管理画面"""
+
     applications = DictProperty({})
     new_client_id = StringProperty("")
     new_application_name = StringProperty("")
 
     def update_rv_data(self):
+        """リストビューのデータを更新"""
         self.ids.rv.data = [
             {
                 "client_id": client_id,
@@ -34,6 +37,7 @@ class DiscordApplicationManagerScreen(Screen):
         ]
 
     def on_pre_enter(self):
+        """画面遷移前にアプリケーションを読み込む"""
         with session_scope() as session:
             dao = DiscordApplicationDao(session)
             apps = dao.get_all_applications()
@@ -41,7 +45,7 @@ class DiscordApplicationManagerScreen(Screen):
         self.update_rv_data()
 
     def fetch_application_name(self):
-        """Fetch the application name based on the new client ID."""
+        """新しいクライアントIDに基づいてアプリケーション名を取得"""
         if self.new_client_id.strip():
             discord_api = DiscordApi()
             self.new_application_name = discord_api.get_app_name(
@@ -51,6 +55,7 @@ class DiscordApplicationManagerScreen(Screen):
             self.new_application_name = ""
 
     def add_application(self):
+        """新しいアプリケーションを追加"""
         client_id = self.new_client_id.strip()
         name = self.new_application_name.strip()
         if client_id and name:
@@ -59,49 +64,27 @@ class DiscordApplicationManagerScreen(Screen):
                 new_app = dao.add_application(client_id, name)
                 self.applications[new_app.client_id] = new_app.name
             self.update_rv_data()
+            # 入力フィールドをクリア
             self.new_client_id = ""
             self.new_application_name = ""
 
     def go_back(self):
+        """メイン画面に遷移"""
         self.manager.current = "main"
 
 
 class DiscordApplicationItem(BoxLayout):
+    """Discordアプリケーションアイテム"""
+
     client_id = StringProperty("")
     name = StringProperty("")
     app_screen = ObjectProperty(None)
 
-    def toggle_edit(self):
-        if self.is_editing:
-            # Confirm edit
-            self.confirm_edit(self.editing_client_id, self.editing_name)
-        else:
-            # Enter edit mode
-            self.editing_client_id = self.client_id
-            self.editing_name = self.name
-            self.is_editing = True
-
-    def confirm_edit(self, new_client_id, new_name):
-        new_client_id = new_client_id.strip()
-        new_name = new_name.strip()
-        if new_client_id and new_name:
-            with session_scope() as session:
-                dao = DiscordApplicationDao(session)
-                dao.update_application(self.client_id, new_client_id, new_name)
-            # Update local data
-            del self.app_screen.applications[self.client_id]
-            self.client_id = new_client_id
-            self.name = new_name
-            self.app_screen.applications[self.client_id] = self.name
-            self.app_screen.update_rv_data()
-        self.is_editing = False
-
     def delete_application(self):
+        """アプリケーションを削除"""
         with session_scope() as session:
             dao = DiscordApplicationDao(session)
             dao.logical_delete_by_client_id(self.client_id)
         del self.app_screen.applications[self.client_id]
+        # リストビューのデータを更新
         self.app_screen.update_rv_data()
-
-    def cancel_edit(self):
-        self.is_editing = False
