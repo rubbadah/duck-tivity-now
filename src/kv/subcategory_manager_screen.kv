@@ -35,27 +35,26 @@
         # メインコンテンツ
         BoxLayout:
             orientation: "vertical"
-            padding: dp(20)
-            spacing: dp(15)
+            padding: dp(15)
+            spacing: dp(10)
 
             RecycleView:
                 id: rv
                 viewclass: 'SubcategoryItem'
                 RecycleBoxLayout:
-                    default_size: None, dp(60)
+                    default_size: None, dp(50)
                     default_size_hint: 1, None
                     size_hint_y: None
                     height: self.minimum_height
                     orientation: 'vertical'
-                    spacing: dp(10)
+                    spacing: dp(8)
 
             BoxLayout:
                 orientation: "vertical"
                 size_hint_y: None
-                height: dp(120)
-                spacing: dp(10)
-                padding: dp(15)
-                spacing: dp(10)
+                height: dp(110)
+                spacing: dp(8)
+                padding: dp(10)
 
                 TextInput:
                     id: subcategory_input
@@ -66,11 +65,12 @@
                     height: dp(40)
                     background_color: rgb(240, 240, 240)
                     foreground_color: rgb(33, 33, 33)
+                    padding: [dp(10), dp(10)]
 
                 BoxLayout:
                     size_hint_y: None
                     height: dp(40)
-                    spacing: dp(10)
+                    spacing: dp(8)
 
                     Button:
                         text: "追加"
@@ -89,8 +89,8 @@
 <SubcategoryItem@BoxLayout>:
     orientation: "horizontal"
     size_hint_y: None
-    height: dp(60)
-    spacing: dp(10)
+    height: dp(50)
+    spacing: dp(8)
     canvas.before:
         Color:
             rgba: rgb(255, 255, 255)
@@ -98,22 +98,23 @@
             pos: self.pos
             size: self.size
             radius: [dp(5)]
-    padding: dp(10)
+    padding: dp(8)
 
     TextInput:
         id: text_input
         text: root.editing_subcategory if root.is_editing else root.text
         multiline: False
-        size_hint_x: 0.6
+        size_hint_x: 0.5
         disabled: not root.is_editing
         on_text: if root.is_editing: root.editing_subcategory = self.text
         on_text_validate: root.confirm_edit(self.text)
         background_color: rgb(240, 240, 240) if not root.is_selected else rgb(113, 193, 209)
+        padding: [dp(8), dp(8)]
 
     Button:
         id: edit_button
         text: "編集" if not root.is_editing else "確定"
-        size_hint_x: 0.2
+        size_hint_x: 0.25
         background_normal: ''
         background_color: rgb(66, 66, 66)
         color: rgb(255, 255, 255)
@@ -122,7 +123,7 @@
     Button:
         id: delete_button
         text: "削除"
-        size_hint_x: 0.2
+        size_hint_x: 0.25
         on_press: root.delete_subcategory()
         background_normal: ''
         background_color: rgb(244, 122, 122)

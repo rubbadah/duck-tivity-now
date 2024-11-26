@@ -27,7 +27,7 @@
             Label:
                 text: "Discord Presence Manager"
                 color: rgb(255, 255, 255)
-                font_size: dp(20)
+                font_size: dp(18)
                 size_hint_x: 1
                 halign: 'left'
                 text_size: self.size
@@ -36,13 +36,13 @@
         # メインコンテンツ
         BoxLayout:
             orientation: "vertical"
-            padding: dp(20)
-            spacing: dp(15)
+            padding: dp(15)
+            spacing: dp(10)
 
             # アプリケーション選択部分
             BoxLayout:
                 orientation: "vertical"
-                spacing: dp(10)
+                spacing: dp(8)
 
                 Label:
                     text: "アプリケーション"
@@ -58,7 +58,7 @@
                     text: root.selected_main_category_name
                     values: root.main_category_names
                     size_hint_y: None
-                    height: dp(50)
+                    height: dp(45)
                     background_normal: ''
                     background_color: rgb(255, 255, 255)
                     color: rgb(33, 33, 33)
@@ -82,7 +82,7 @@
                     text: root.selected_sub_category
                     values: root.sub_category_contents
                     size_hint_y: None
-                    height: dp(50)
+                    height: dp(45)
                     background_normal: ''
                     background_color: rgb(255, 255, 255)
                     color: rgb(33, 33, 33)
@@ -94,31 +94,36 @@
 
             # 操作ボタン群
             BoxLayout:
-                orientation: "horizontal"
+                orientation: "vertical"
                 size_hint_y: None
-                height: dp(50)
-                spacing: dp(15)
+                height: dp(100)
+                spacing: dp(10)
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(45)
+                    spacing: dp(10)
+
+                    Button:
+                        text: "Discordアプリ管理"
+                        background_normal: ''
+                        background_color: rgb(66, 66, 66)
+                        color: rgb(255, 255, 255)
+                        on_press: root.go_to_discord_manager()
+
+                    Button:
+                        text: "サブカテゴリの管理"
+                        background_normal: ''
+                        background_color: rgb(66, 66, 66)
+                        color: rgb(255, 255, 255)
+                        on_press: root.go_to_subcategory_manager()
 
                 Button:
-                    text: "Discordアプリ管理"
+                    text: "開始" if not root.is_running else "終了"
+                    size_hint_y: None
+                    height: dp(45)
                     background_normal: ''
-                    background_color: rgb(66, 66, 66)
+                    background_color: rgb(76, 175, 80) if not root.is_running else rgb(244, 122, 122)
                     color: rgb(255, 255, 255)
-                    on_press: root.go_to_discord_manager()
-
-                Button:
-                    text: "サブカテゴリの管理"
-                    background_normal: ''
-                    background_color: rgb(66, 66, 66)
-                    color: rgb(255, 255, 255)
-                    on_press: root.go_to_subcategory_manager()
-
-            # 開始/終了ボタン
-            Button:
-                text: "開始" if not root.is_running else "終了"
-                size_hint_y: None
-                height: dp(50)
-                background_normal: ''
-                background_color: rgb(76, 175, 80) if not root.is_running else rgb(244, 122, 122)
-                color: rgb(255, 255, 255)
-                on_press: root.on_confirm()
+                    on_press: root.on_confirm()

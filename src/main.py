@@ -1,13 +1,13 @@
+import asyncio
 import os
 
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.text import DEFAULT_FONT, LabelBase
 from kivy.lang import Builder
 from kivy.resources import resource_add_path
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen, ScreenManager
-from sqlalchemy.orm import Session
+from kivy.uix.screenmanager import ScreenManager
+from kivy.utils import platform
 
 from dao.detail_dao import DetailDao
 from dao.log_dao import LogDao
@@ -19,14 +19,20 @@ from screens.main_screen import MainScreen
 from screens.subcategory_manager_screen import SubcategoryManagerScreen
 from utils.color_utils import rgb
 
+# Androidの場合、パーミッションを要求
+if platform == "android":
+    from android.permissions import Permission, request_permissions
+
+    request_permissions([Permission.INTERNET])
+
 # kvファイルのロード
 Builder.load_file("kv/main_screen.kv")
 Builder.load_file("kv/subcategory_manager_screen.kv")
 Builder.load_file("kv/confirm_popup.kv")
 
 # フォントファイルを指定
-font_path = (
-    "../src/font/NotoSansJP-Regular.ttf"  # フォントファイルへのパスを指定
+font_path = os.path.join(
+    os.path.dirname(__file__), "font", "NotoSansJP-Regular.ttf"
 )
 resource_add_path(os.path.dirname(font_path))
 LabelBase.register(DEFAULT_FONT, font_path)
@@ -44,11 +50,7 @@ class MyScreenManager(ScreenManager):
 
 class MyApp(App):
     def build(self):
-        sm = MyScreenManager()
-
-        # RGBの変換関数
-        self.rgb = rgb
-        return sm
+        return MyScreenManager()
 
 
 if __name__ == "__main__":
